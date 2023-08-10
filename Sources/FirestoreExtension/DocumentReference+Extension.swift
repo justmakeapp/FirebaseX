@@ -29,4 +29,9 @@ public extension DocumentReference {
     func updateDataSync(_ fields: [AnyHashable: Any]) {
         updateData(fields)
     }
+
+    /// Force delete data offline (and synchronously) even when the calling function is asynchronous.
+    func deleteSync() {
+        delete()
+    }
 }
