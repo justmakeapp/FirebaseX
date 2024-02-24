@@ -11,8 +11,8 @@ let package = Package(
             targets: ["FirestoreExtension"]
         ),
         .library(
-            name: "RTFDatabaseExtension",
-            targets: ["RTFDatabaseExtension"]
+            name: "RtdbExtension",
+            targets: ["RtdbExtension"]
         ),
     ],
     dependencies: [
@@ -28,7 +28,7 @@ let package = Package(
             ]
         ),
         .target(
-            name: "RTFDatabaseExtension",
+            name: "RtdbExtension",
             dependencies: [
                 .productItem(name: "FirebaseDatabase", package: "firebase-ios-sdk"),
                 .byName(name: "CombineExt")
