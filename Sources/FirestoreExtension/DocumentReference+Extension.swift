@@ -8,7 +8,7 @@
 import FirebaseFirestore
 
 public extension DocumentReference {
-    func setData(_ encodableData: some Encodable, encoder: JSONEncoder = .init()) throws {
+    func setData(_ encodableData: some Encodable, encoder: JSONEncoder = .init(), merge: Bool = false) throws {
         let encodedData = try encoder.encode(encodableData)
         guard let jsonObject = try JSONSerialization.jsonObject(with: encodedData, options: []) as? [String: Any] else {
             throw NSError(
@@ -17,7 +17,7 @@ public extension DocumentReference {
                 userInfo: [NSLocalizedDescriptionKey: "Can not cast to json object"]
             )
         }
-        setData(jsonObject)
+        setData(jsonObject, merge: merge)
     }
 
     /// Force write data offline (and synchronously) even when the calling function is asynchronous.
@@ -30,8 +30,11 @@ public extension DocumentReference {
         updateData(fields)
     }
 
-    /// Force delete data offline (and synchronously) even when the calling function is asynchronous.
     func deleteSync() {
-        delete()
+        delete { error in
+            if let error {
+                debugPrint(error)
+            }
+        }
     }
 }
