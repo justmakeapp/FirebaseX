@@ -1,11 +1,19 @@
-// swift-tools-version: 5.6
+// swift-tools-version: 5.9
 
 import PackageDescription
 
 let package = Package(
     name: "FirebaseX",
-    platforms: [.iOS(.v13), .watchOS(.v7), .macCatalyst(.v13), .macOS(.v11)],
+    platforms: [.iOS(.v16), .macOS(.v13)],
     products: [
+        .library(
+            name: "FirebaseFileSync",
+            targets: ["FirebaseFileSync"]
+        ),
+        .library(
+            name: "FirebaseAuthExtension",
+            targets: ["FirebaseAuthExtension"]
+        ),
         .library(
             name: "FirestoreExtension",
             targets: ["FirestoreExtension"]
@@ -21,6 +29,16 @@ let package = Package(
     ],
     targets: [
         .target(
+            name: "FirebaseFileSync",
+            dependencies: []
+        ),
+        .target(
+            name: "FirebaseAuthExtension",
+            dependencies: [
+                .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
+            ]
+        ),
+        .target(
             name: "FirestoreExtension",
             dependencies: [
                 .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
@@ -30,7 +48,7 @@ let package = Package(
         .target(
             name: "RtdbExtension",
             dependencies: [
-                .productItem(name: "FirebaseDatabase", package: "firebase-ios-sdk"),
+                .product(name: "FirebaseDatabase", package: "firebase-ios-sdk"),
                 .byName(name: "CombineExt")
             ]
         ),
