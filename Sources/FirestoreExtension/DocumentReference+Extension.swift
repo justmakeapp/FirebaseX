@@ -25,6 +25,21 @@ public extension DocumentReference {
         setData(documentData, merge: merge)
     }
 
+    func updateDataSync(
+        encodableData: some Encodable,
+        encoder: JSONEncoder = .init()
+    ) throws {
+        let encodedData = try encoder.encode(encodableData)
+        guard let jsonObject = try JSONSerialization.jsonObject(with: encodedData, options: []) as? [String: Any] else {
+            throw NSError(
+                domain: "",
+                code: 1_000,
+                userInfo: [NSLocalizedDescriptionKey: "Can not cast to json object"]
+            )
+        }
+        updateData(jsonObject)
+    }
+
     /// Force update data offline (and synchronously) even when the calling function is asynchronous.
     func updateDataSync(_ fields: [AnyHashable: Any]) {
         updateData(fields)
