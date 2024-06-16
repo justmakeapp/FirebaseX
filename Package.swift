@@ -24,7 +24,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.25.0"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.27.0"),
         .package(url: "https://github.com/CombineCommunity/CombineExt", from: "1.8.1")
     ],
     targets: [
