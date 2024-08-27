@@ -33,7 +33,7 @@
       "location" : "https://github.com/firebase/firebase-ios-sdk",
       "state" : {
         "revision" : "8bcaf973b1d84e119b7c7c119abad72ed460979f",
-        "version" : "10.27.0"
+        "version" : "11.1.0"
       }
     },
     {
@@ -42,7 +42,7 @@
       "location" : "https://github.com/google/GoogleAppMeasurement.git",
       "state" : {
         "revision" : "70df02431e216bed98dd461e0c4665889245ba70",
-        "version" : "10.27.0"
+        "version" : "11.1.0"
       }
     },
     {
