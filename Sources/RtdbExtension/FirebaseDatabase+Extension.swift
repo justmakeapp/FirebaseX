@@ -20,8 +20,8 @@ public extension DataSnapshot {
         return Date(timeIntervalSince1970: interval)
     }
 
-    var bool: Bool {
-        return value as? Bool ?? false
+    var bool: Bool? {
+        return value as? Bool
     }
 
     var boolValue: Bool {
