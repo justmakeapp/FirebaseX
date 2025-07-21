@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version:6.0
 
 import PackageDescription
 
@@ -24,7 +24,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "11.6.0"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "12.0.0"),
         .package(url: "https://github.com/CombineCommunity/CombineExt", from: "1.8.1")
     ],
     targets: [
@@ -52,5 +52,6 @@ let package = Package(
                 .byName(name: "CombineExt")
             ]
         ),
-    ]
+    ],
+    swiftLanguageModes: [.v6]
 )
