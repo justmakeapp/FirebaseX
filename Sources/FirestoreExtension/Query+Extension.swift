@@ -9,22 +9,42 @@ import Combine
 import CombineExt
 import FirebaseFirestore
 
+struct UncheckedCompletion: @unchecked Sendable {
+    typealias Block = () -> Void
+
+    let block: Block?
+
+    init(_ block: Block?) {
+        if let block {
+            self.block = {
+                block()
+            }
+        } else {
+            self.block = nil
+        }
+    }
+}
+
 public extension Query {
-//    func publisher() -> AnyPublisher<QuerySnapshot?, Error> {
-//        return AnyPublisher.init { subscriber in
-//            let listener = self.addSnapshotListener { snapshot, error in
-//                if let error {
-//                    debugPrint(error.localizedDescription)
-//                    subscriber.send(completion: .failure(error))
-//                    return
-//                }
-//
-//                subscriber.send(snapshot)
-//            }
-//
-//            return AnyCancellable {
-//                listener.remove()
-//            }
-//        }
-//    }
+    func asAsyncThrowingStream(
+        includeMetadataChanges: Bool = false
+    ) -> AsyncThrowingStream<QuerySnapshot?, Error> {
+        .init { continuation in
+            let listener = addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { snapshot, error in
+                if let error {
+                    continuation.finish(throwing: error)
+                } else {
+                    continuation.yield(snapshot)
+                }
+            }
+
+            let completion = UncheckedCompletion {
+                listener.remove()
+            }
+
+            continuation.onTermination = { _ in
+                completion.block?()
+            }
+        }
+    }
 }

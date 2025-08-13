@@ -52,4 +52,26 @@ public extension DocumentReference {
             }
         }
     }
+
+    func asAsyncThrowingStream(
+        includeMetadataChanges: Bool = false
+    ) -> AsyncThrowingStream<DocumentSnapshot?, Error> {
+        .init { continuation in
+            let listener = addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { snapshot, error in
+                if let error {
+                    continuation.finish(throwing: error)
+                } else {
+                    continuation.yield(snapshot)
+                }
+            }
+
+            let completion = UncheckedCompletion {
+                listener.remove()
+            }
+
+            continuation.onTermination = { _ in
+                completion.block?()
+            }
+        }
+    }
 }
