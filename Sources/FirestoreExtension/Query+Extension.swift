@@ -42,7 +42,8 @@ public extension Query {
                 listener.remove()
             }
 
-            continuation.onTermination = { _ in
+            continuation.onTermination = { termination in
+                debugPrint("Query stream terminated \(termination)")
                 completion.block?()
             }
         }
