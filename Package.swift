@@ -1,4 +1,4 @@
-// swift-tools-version:6.0
+// swift-tools-version:6.1
 
 import PackageDescription
 
@@ -52,6 +52,5 @@ let package = Package(
                 .byName(name: "CombineExt")
             ]
         ),
-    ],
-    swiftLanguageModes: [.v6]
+    ]
 )

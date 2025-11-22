@@ -26,6 +26,30 @@ struct UncheckedCompletion: @unchecked Sendable {
 }
 
 public extension Query {
+    func asAsyncStream(
+        includeMetadataChanges: Bool = false
+    ) -> AsyncStream<QuerySnapshot?> {
+        .init { continuation in
+            let listener = addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { snapshot, error in
+                if let error {
+                    debugPrint("[FirebaseX] \(#function) Query stream error: \(error)")
+                    continuation.finish()
+                } else {
+                    continuation.yield(snapshot)
+                }
+            }
+
+            let completion = UncheckedCompletion {
+                listener.remove()
+            }
+
+            continuation.onTermination = { termination in
+                debugPrint("[FirebaseX] \(#function) Query stream terminated \(termination)")
+                completion.block?()
+            }
+        }
+    }
+
     func asAsyncThrowingStream(
         includeMetadataChanges: Bool = false
     ) -> AsyncThrowingStream<QuerySnapshot?, Error> {
@@ -43,7 +67,7 @@ public extension Query {
             }
 
             continuation.onTermination = { termination in
-                debugPrint("Query stream terminated \(termination)")
+                debugPrint("[FirebaseX] \(#function) Query stream terminated \(termination)")
                 completion.block?()
             }
         }
