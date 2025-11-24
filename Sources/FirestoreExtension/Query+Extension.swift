@@ -5,8 +5,6 @@
 //  Created by Long Vu on 11/04/2023.
 //
 
-import Combine
-import CombineExt
 import FirebaseFirestore
 
 struct UncheckedCompletion: @unchecked Sendable {
@@ -32,7 +30,11 @@ public extension Query {
         .init { continuation in
             let listener = addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { snapshot, error in
                 if let error {
-                    debugPrint("[FirebaseX] \(#function) Query stream error: \(error)")
+                    if (error as NSError).code == FirestoreErrorCode.permissionDenied.rawValue {
+                        debugPrint("[FirebaseX] \(#function): Permission denied. Maybe user did sign out.")
+                    } else {
+                        debugPrint("[FirebaseX] \(#function) Query stream error: \(error)")
+                    }
                     continuation.finish()
                 } else {
                     continuation.yield(snapshot)
@@ -56,7 +58,13 @@ public extension Query {
         .init { continuation in
             let listener = addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { snapshot, error in
                 if let error {
-                    continuation.finish(throwing: error)
+                    if (error as NSError).code == FirestoreErrorCode.permissionDenied.rawValue {
+                        debugPrint("[FirebaseX] \(#function): Permission denied. Maybe user did sign out.")
+                        continuation.finish()
+                    } else {
+                        debugPrint("[FirebaseX] \(#function) Query stream error: \(error)")
+                        continuation.finish(throwing: error)
+                    }
                 } else {
                     continuation.yield(snapshot)
                 }

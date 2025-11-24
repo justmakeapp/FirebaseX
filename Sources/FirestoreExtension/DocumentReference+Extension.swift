@@ -59,7 +59,12 @@ public extension DocumentReference {
         .init { continuation in
             let listener = addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { snapshot, error in
                 if let error {
-                    continuation.finish(throwing: error)
+                    if (error as NSError).code == FirestoreErrorCode.permissionDenied.rawValue {
+                        debugPrint("[FirebaseX] \(#function): Permission denied. Maybe user did sign out.")
+                        continuation.finish()
+                    } else {
+                        continuation.finish(throwing: error)
+                    }
                 } else {
                     continuation.yield(snapshot)
                 }
