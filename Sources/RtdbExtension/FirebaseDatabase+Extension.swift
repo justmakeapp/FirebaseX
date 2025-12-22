@@ -54,9 +54,11 @@ public extension DatabaseReference {
         setValue(value)
     }
 
-    func setEncodableValue(_ value: some Encodable,
-                           with encoder: JSONEncoder = .init(),
-                           completionBlock: ((Error?, DatabaseReference) -> Void)? = nil) throws {
+    func setEncodableValueSync(
+        _ value: some Encodable,
+        with encoder: JSONEncoder = .init(),
+        completionBlock: ((Error?, DatabaseReference) -> Void)? = nil
+    ) throws {
         let encodedData = try encoder.encode(value)
         let jsonObject = try JSONSerialization.jsonObject(with: encodedData, options: [])
 
