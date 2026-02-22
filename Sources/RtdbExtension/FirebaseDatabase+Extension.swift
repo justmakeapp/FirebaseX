@@ -3,7 +3,9 @@
 import FirebaseDatabase
 
 public extension DataSnapshot {
-    var childSnapshots: [DataSnapshot] { children.compactMap { $0 as? DataSnapshot } }
+    var childSnapshots: [DataSnapshot] {
+        children.compactMap { $0 as? DataSnapshot }
+    }
 
     var string: String? {
         return value as? String

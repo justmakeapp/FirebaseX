@@ -17,14 +17,14 @@ public struct FirebaseFileSyncManager {
             ).first!
         }
 
-        let url = documentUrl.appendingPathComponent("firebase")
-
-        return url
+        return documentUrl.appendingPathComponent("firebase")
     }()
 
     private let sharedContainer: URL
     private let sharedTargetPath: String = "persistence-sync-content"
-    private var contentContainerURL: URL { sharedContainer.appendingPathComponent(sharedTargetPath) }
+    private var contentContainerURL: URL {
+        sharedContainer.appendingPathComponent(sharedTargetPath)
+    }
 
     public init(appGroup: String) {
         self.sharedContainer = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup)!

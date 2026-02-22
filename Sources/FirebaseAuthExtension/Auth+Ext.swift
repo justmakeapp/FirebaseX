@@ -13,10 +13,10 @@ public extension FirebaseAuth.Auth {
         }
     }
 
-    // it basically checks if Auth is already using the correct userAccessGroup and
-    // if so, nothing needs to be done.
-    // If not, the existing user is temporary saved,
-    // then Firebase Auth is configured to use the Access Group and then the user is moved to it.
+    /// it basically checks if Auth is already using the correct userAccessGroup and
+    /// if so, nothing needs to be done.
+    /// If not, the existing user is temporary saved,
+    /// then Firebase Auth is configured to use the Access Group and then the user is moved to it.
     static func migrateFirebaseAuthToAccessGroupIfNeeded(_ accessGroup: String) {
         let log = Logger(
             subsystem: Bundle.main.bundleIdentifier!,
