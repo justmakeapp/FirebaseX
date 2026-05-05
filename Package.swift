@@ -39,5 +39,6 @@ let package = Package(
                 "SwiftyJSON",
             ]
         ),
-    ]
+    ],
+    swiftLanguageModes: [.v6]
 )
