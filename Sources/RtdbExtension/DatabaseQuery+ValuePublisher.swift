@@ -1,7 +1,7 @@
 // Created 15/02/2022
 
 import Combine
-import CombineExt
+@preconcurrency import CombineExt
 import FirebaseDatabase
 import Foundation
 
@@ -31,9 +31,10 @@ public extension DatabaseQuery {
 
         case .latestValueFromServer:
             return AnyPublisher<DataSnapshot, Never> { subscriber -> Cancellable in
+                let subscriber = UncheckedSendableBox(subscriber)
                 self.getData { _, snapshot in
                     let snapshot = snapshot ?? DataSnapshot()
-                    subscriber.send(snapshot)
+                    subscriber.value.send(snapshot)
                 }
                 return AnyCancellable {}
             }
@@ -51,13 +52,14 @@ public extension DatabaseQuery {
     func upToDateValueSinglePublisher() -> AnyPublisher<DataSnapshot?, Error> {
         return Deferred {
             Future { promise in
+                let promise = UncheckedSendableBox(promise)
                 self.getData { error, dataSnapshot in
                     if let error {
-                        promise(.failure(error))
+                        promise.value(.failure(error))
                         return
                     }
 
-                    return promise(.success(dataSnapshot))
+                    return promise.value(.success(dataSnapshot))
                 }
             }
         }
@@ -69,4 +71,13 @@ public enum DataStreamType: String {
     case once
     case latestValueFromServer
     case continuous
+}
+
+/// Firebase invokes its callbacks on a single queue, so these captured values are not accessed concurrently.
+struct UncheckedSendableBox<Value>: @unchecked Sendable {
+    let value: Value
+
+    init(_ value: Value) {
+        self.value = value
+    }
 }

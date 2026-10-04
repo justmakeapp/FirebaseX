@@ -65,7 +65,10 @@ public extension DatabaseReference {
         let jsonObject = try JSONSerialization.jsonObject(with: encodedData, options: [])
 
         if let serverCompletionBlock = completionBlock {
-            setValue(jsonObject, withCompletionBlock: serverCompletionBlock)
+            let serverCompletionBlock = UncheckedSendableBox(serverCompletionBlock)
+            setValue(jsonObject) { error, ref in
+                serverCompletionBlock.value(error, ref)
+            }
         } else {
             setValue(jsonObject)
         }
