@@ -12,7 +12,7 @@ let package = Package(
         .library(name: "RtdbExtension", targets: ["RtdbExtension"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "12.0.0"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "13.0.0"),
         .package(url: "https://github.com/CombineCommunity/CombineExt", from: "1.8.1"),
         .package(url: "https://github.com/SwiftyJSON/SwiftyJSON", from: "5.0.2"),
     ],
