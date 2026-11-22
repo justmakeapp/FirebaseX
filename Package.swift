@@ -6,7 +6,6 @@ let package = Package(
     name: "FirebaseX",
     platforms: [.iOS(.v17), .macOS(.v14)],
     products: [
-        .library(name: "FirebaseFileSync", targets: ["FirebaseFileSync"]),
         .library(name: "FirebaseAuthExtension", targets: ["FirebaseAuthExtension"]),
         .library(name: "FirestoreExtension", targets: ["FirestoreExtension"]),
         .library(name: "RtdbExtension", targets: ["RtdbExtension"]),
@@ -17,7 +16,6 @@ let package = Package(
         .package(url: "https://github.com/SwiftyJSON/SwiftyJSON", from: "5.0.2"),
     ],
     targets: [
-        .target(name: "FirebaseFileSync"),
         .target(
             name: "FirebaseAuthExtension",
             dependencies: [
